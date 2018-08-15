@@ -55,8 +55,8 @@ Route::middleware('auth')->group(function () {
         Route::get('show-trash-role', ['middleware' => ['permission:user.trash'], 'uses' => 'AuthorizedController@getShowTrashRole', 'as' => 'authorized.get-show-trash-role']);
         Route::get('ajax-data-trash', ['middleware' => ['permission:user.trash'], 'uses' => 'AuthorizedController@getAjaxDataTrash', 'as' => 'authorized.get-ajax-data-trash']);
 
-        Route::get('put-back/{id}', ['middleware' => ['permission:user.trash'], 'uses' => 'AuthorizedController@postPutBack', 'as' => 'authorized.post-put-back']);
-        Route::get('remove-trash/{id}', ['middleware' => ['permission:user.remove'], 'uses' => 'AuthorizedController@postRemoveTrash', 'as' => 'authorized.post-remove-trash']);
+        Route::post('put-back/{id}', ['middleware' => ['permission:user.trash'], 'uses' => 'AuthorizedController@postPutBack', 'as' => 'authorized.post-put-back']);
+        Route::post('remove-trash/{id}', ['middleware' => ['permission:user.remove'], 'uses' => 'AuthorizedController@postRemoveTrash', 'as' => 'authorized.post-remove-trash']);
 
         Route::get('show-permission', ['uses' => 'AuthorizedController@getShowPermission', 'as' => 'authorized.get-show-permission']);
         Route::get('ajax-data-permission', ['uses' => 'AuthorizedController@getAjaxDataPermission', 'as' => 'authorized.get-ajax-data-permission']);

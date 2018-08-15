@@ -89,8 +89,8 @@ class AuthorizedController extends MyController
         foreach ($request->input('permission') as $key => $value) {
             $role->attachPermission($value);
         }
-
-        return redirect()->route('authorized.get-show-role')->with('msg-success', 'Thêm nhóm thành công.');
+        session()->flash('msg-success', 'Thêm nhóm thành công.');
+        return redirect()->route('authorized.get-show-role');
     }
 
 
@@ -105,8 +105,8 @@ class AuthorizedController extends MyController
         $role = Permission::create($request->all());
         //attach the selected permissions
 
-
-        return redirect()->route('authorized.get-show-role')->with('msg-success', 'Thêm quyền thành công.');
+        session()->flash('msg-success', 'Thêm quyền thành công.');
+        return redirect()->route('authorized.get-show-role');
     }
 
     /**
@@ -142,9 +142,10 @@ class AuthorizedController extends MyController
     {
         $model = new RoleUser();
         if (!$model->edit($id, $this->_inputs)) {
-            return redirect()->back()->with('msg-error', 'Cập nhật nhóm thành viên không thành công.');
+            session()->flash('msg-error', 'Cập nhật nhóm thành viên không thành công.');
+            return redirect()->back();
         }
-
+        session()->flash('msg-success', 'Cập nhật nhóm thành viên thành công.');
         return redirect()->back()->with('msg-success', 'Cập nhật nhóm thành viên thành công.');
     }
 
@@ -194,6 +195,7 @@ class AuthorizedController extends MyController
             'sort' => $request->input('sort', 'id'),
             'order' => $request->input('order', 'asc'),
             'search' => $request->input('search', ''),
+            'is_deleted' => $request->input('is_deleted', 0),
         ];
 
         $model = new Role();
@@ -236,9 +238,10 @@ class AuthorizedController extends MyController
     {
         $model = new PermissionRole();
         if (!$model->edit($id, $this->_inputs['ids'])) {
-            return redirect()->back()->with('msg-error', ' Cập nhật phân quyền không thành công . ');
+            session()->flash('msg-error', ' Cập nhật phân quyền không thành công . ');
+            return redirect()->back();
         }
-
+        session()->flash('msg-success', ' Cập nhật phân quyền thành công . ');
         return redirect()->back()->with('msg-success', ' Cập nhật phân quyền thành công . ');
     }
 
@@ -267,7 +270,24 @@ class AuthorizedController extends MyController
         return redirect()->route('authorized.get-show-permission')->with('success', 'Quyền đã được cập nhập');
       //  return view("authorized.update-permission", compact('permission'));
     }
+ public function getAjaxDataTrash(Request $request)
+    {
+        $filters = array(
+            'offset' => (int) $request->input('offset', 0),
+            'limit' => (int) $request->input('limit', PAGE_LIST_COUNT),
+            'sort' => $request->input('sort', 'id'),
+            'order' => $request->input('order', 'asc'),
+            'search' => $request->input('search', ''),
+            'is_deleted' => $request->input('is_deleted', 1),
+        );
+        $model = new Role();
 
+        $data = $model->getShowAll($filters);
+        return response()->json([
+            'total' => $data['total'],
+            'rows' => $data['data'],
+        ]);
+    }
 
     public function getShowTrashRole(Request $request)
     {

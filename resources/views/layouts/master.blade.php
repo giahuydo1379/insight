@@ -190,13 +190,14 @@
 @yield('footer_js')
 
 <script>
-  $(document).ready(function () {
-    <?php if (session('msg-success') || session('msg-error')): ?>
-      var msg = "<?= session('msg-success') ? session('msg-success') : session('msg-error') ?>";
-      var type = "<?= session('msg-success') ? 'success' : 'danger' ?>";
-      notifyMsg(msg, type);
-    <?php endif; ?>
-  });
+   @if(session('msg-success') || session('msg-error'))
+    $(document).ready(function () {
+        var msg = "{{ session('msg-success') ? session('msg-success') : session('msg-error') }}";
+        var type = "{{ session('msg-success') ? 'success' : 'danger' }}";
+        notifyMsg(msg, type);
+
+    });
+  @endif
 
   function notifyMsg(msg, type = 'success') {
     $.niftyNoty({

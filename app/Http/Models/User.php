@@ -50,7 +50,7 @@ class User extends Authenticatable
         parent::boot();
         static::created(function ($user) {
             if ($user->roles->count() == 0) {
-                $user->roles()->attach(19);
+                $user->roles()->attach(10);
             }
         });
     }

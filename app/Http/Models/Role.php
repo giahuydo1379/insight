@@ -33,6 +33,11 @@ class Role extends EntrustRole
     public function getShowAll($filters = array())
     {
         $sql = self::select();
+        if (isset($filters['is_deleted'])) {
+            if($filters['is_deleted'] == 1) {
+                $sql->onlyTrashed();
+            }
+        }
         if (!empty($keyword = $filters['search'])) {
             $sql->where(function ($query) use ($keyword) {
                 $query->where('name', 'LIKE', '%'.$keyword.'%');
